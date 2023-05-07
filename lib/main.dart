@@ -60,6 +60,15 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Talitha Nabila BotNav'),
+        // Talitha Nabila - 1301204516
+        actions: <Widget>[
+          IconButton(
+            icon: const Icon(Icons.menu),
+            onPressed: () {
+              print('Menu button pressed!');
+            },
+          ),
+        ],
       ),
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
