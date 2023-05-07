@@ -83,6 +83,13 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
         selectedItemColor: Colors.amber[800],
         onTap: _onItemTapped,
       ),
+      // Talitha Nabila - 1301204516
+      floatingActionButton: ElevatedButton(
+        onPressed: () {
+          print('Submit button pressed!');
+        },
+        child: Text('Submit'),
+      ),
     );
   }
 }
