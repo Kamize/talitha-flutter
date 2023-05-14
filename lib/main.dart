@@ -10,14 +10,19 @@ import 'package:flutter/material.dart';
 void main() => runApp(const MyApp());
 
 /// This is the main application widget.
+/// Talitha Nabila - 1301204516
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
   static const String _title = 'Flutter Code Sample';
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      title: _title,
-      home: MyStatefulWidget(),
+    return MaterialApp(
+      title: 'Navigation Example',
+      initialRoute: '/',
+      routes: {
+        '/': (context) => FirstFlow(),
+        '/second': (context) => SecondFlow(),
+      },
     );
   }
 }
@@ -72,7 +77,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
           ),
         ],
       ),
-        // child: _widgetOptions.elementAt(_selectedIndex),
+      // child: _widgetOptions.elementAt(_selectedIndex),
       body: Center(
         // Talitha Nabila - 1301204516
         child: DropdownButton<String>(
@@ -82,8 +87,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
               selectedValue = newValue!;
             });
           },
-          items: dropdownItems
-              .map<DropdownMenuItem<String>>((String value) {
+          items: dropdownItems.map<DropdownMenuItem<String>>((String value) {
             return DropdownMenuItem<String>(
               value: value,
               child: Text(value),
@@ -116,6 +120,47 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
           print('Submit button pressed!');
         },
         child: Text('Submit'),
+      ),
+    );
+  }
+}
+
+class FirstFlow extends StatelessWidget {
+  // Talitha Nabila - 1301204516
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Flow pertama Talitha 1301204516'),
+      ),
+      body: Center(
+        child: ElevatedButton(
+          child: Text('Pindah ke flow ke-2'),
+          onPressed: () {
+            Navigator.pushNamed(context, '/second');
+          },
+        ),
+      ),
+    );
+  }
+}
+
+class SecondFlow extends StatelessWidget {
+  // Talitha Nabila - 1301204516
+  const SecondFlow();
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('ini adalah flow ke-2 Talitha'),
+      ),
+      body: Center(
+        child: ElevatedButton(
+          child: Text('Kembali ke flow pertama'),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
       ),
     );
   }
