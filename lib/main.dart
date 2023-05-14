@@ -7,6 +7,13 @@
 // and displays a corresponding message in the center of the [Scaffold].
 import 'package:flutter/material.dart';
 
+class Todo {
+  final String title;
+  final String description;
+
+  const Todo(this.title, this.description);
+}
+
 void main() => runApp(const MyApp());
 
 /// This is the main application widget.
@@ -17,12 +24,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Navigation Example',
-      initialRoute: '/',
-      routes: {
-        '/': (context) => FirstFlow(),
-        '/second': (context) => SecondFlow(),
-      },
+      title: 'Passing Data',
+      home: TodosScreen(
+        todos: List.generate(
+          6,
+          (i) => Todo(
+            'To-do list $i',
+            'This is List $i description by Talitha Nabila',
+          ),
+        ),
+      ),
     );
   }
 }
@@ -163,5 +174,49 @@ class SecondFlow extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class TodosScreen extends StatelessWidget {
+  const TodosScreen({super.key, required this.todos});
+
+  final List<Todo> todos;
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          title: const Text('Talitha Todos'),
+        ),
+        body: ListView.builder(
+          itemCount: todos.length,
+          itemBuilder: (context, index) {
+            return ListTile(
+                title: Text(todos[index].title),
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => DetailScreen(todo: todos[index]),
+                      ));
+                });
+          },
+        ));
+  }
+}
+
+class DetailScreen extends StatelessWidget {
+  const DetailScreen({super.key, required this.todo});
+  final Todo todo;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          title: Text(todo.title),
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Text(todo.description),
+        ));
   }
 }
