@@ -1,5 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.myapp">
+    <!-- Talitha Nabila - 1301204516 -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.VIBRATE" />
    <application
         android:label="myapp"
         android:name="${applicationName}"
@@ -32,3 +35,5 @@
             android:value="2" />
     </application>
 </manifest>
+
+
