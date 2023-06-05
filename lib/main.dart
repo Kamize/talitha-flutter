@@ -1,133 +1,89 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 // Talitha Nabila - 1301204516
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<Cart>(
-      create: (context) => Cart(),
-      child: MaterialApp(
-        title: 'Talitha Nabila State Management Provider Demo',
-        theme: ThemeData(
-          primarySwatch: Colors.pink,
-        ),
-        home: const HomePage(),
+    return MaterialApp(
+      title: 'Talitha Nabila Networking Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.pink,
       ),
+      home: MyHomePage(),
     );
   }
 }
 
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
-
+//Talitha Nabila - 1301204516
+class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Talitha Nabila Shopping Cart'),
+        title: Text('Talitha Nabila Networking Demo'),
       ),
-      body: Column(
-        children: [
-          expand(),
-          const CartTotal(),
-          const ClearCartButton(),
-        ],
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                deleteNotes('1');
+              },
+              child: Text('Delete Notes'),
+            ),
+            SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () {
+                createNotes('New Notes');
+              },
+              child: Text('Create Notes'),
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  Expanded expand() {
-    return const Expanded(
-          child: ItemList(),
-        );
-  }
-}
-
-class ItemList extends StatelessWidget {
-  const ItemList({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final cart = Provider.of<Cart>(context);
-    return ListView.builder(
-      itemCount: cart.items.length,
-      itemBuilder: (context, index) {
-        final item = cart.items[index];
-        return ListTile(
-          title: Text(item.name),
-          subtitle: Text('\$${item.price.toStringAsFixed(2)}'),
-          trailing: IconButton(
-            icon: const Icon(Icons.add),
-            onPressed: () => cart.addItem(item),
-          ),
-        );
+//Talitha Nabila - 1301204516
+  Future<void> deleteNotes(String id) async {
+    final http.Response response = await http.delete(
+      Uri.parse('https://jsonplaceholder.typicode.com/albums/$id'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
       },
     );
+    if (response.statusCode == 200) {
+      print('Notes $id deleted successfully');
+    } else {
+      print('Failed to delete album. Error: ${response.statusCode}');
+    }
   }
-}
 
-// Talitha Nabila - 1301204516
-class CartTotal extends StatelessWidget {
-  const CartTotal({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final cart = Provider.of<Cart>(context);
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Text(
-        'Total: \$${cart.totalValue.toStringAsFixed(2)}',
-        style: const TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
-      ),
+//Talitha Nabila - 1301204516
+  Future<void> createNotes(String title) async {
+    final http.Response response = await http.post(
+      Uri.parse('https://jsonplaceholder.typicode.com/albums'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'title': title,
+      }),
     );
+    if (response.statusCode == 201) {
+      print('Notes created successfully');
+      final Map<String, dynamic> album = jsonDecode(response.body);
+      print('New Notes ID: ${album['id']}');
+      print('New Notes Title: ${album['title']}');
+    } else {
+      print('Failed to create album. Error: ${response.statusCode}');
+    }
   }
-}
-
-class ClearCartButton extends StatelessWidget {
-  const ClearCartButton({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final cart = Provider.of<Cart>(context);
-    return ElevatedButton(
-      onPressed: () => cart.clearCart(),
-      child: const Text('Clear Cart'),
-    );
-  }
-}
-
-class Cart extends ChangeNotifier {
-  final List<Item> _items = [
-    Item(name: 'Item 1', price: 40.0),
-    Item(name: 'Item 2', price: 50.0),
-    Item(name: 'Item 3', price: 60.0),
-  ];
-
-  List<Item> get items => _items;
-
-  double get totalValue => _items.fold(0, (sum, item) => sum + item.price);
-
-  void addItem(Item item) {
-    _items.add(item);
-    notifyListeners();
-  }
-
-  void clearCart() {
-    _items.clear();
-    notifyListeners();
-  }
-}
-
-class Item {
-  final String name;
-  final double price;
-
-  Item({required this.name, required this.price});
 }
