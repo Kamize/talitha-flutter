@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.myapp">
+    package="com.pinkesh.google_maps_flutter">
     <!-- Talitha Nabila - 1301204516 -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <uses-permission android:name="android.permission.VIBRATE" />
@@ -7,6 +7,9 @@
         android:label="myapp"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+        <!-- TODO: Add your API key here -->
+        <meta-data android:name="com.google.android.geo.API_KEY"
+        android:value="AIzaSyBW_R1disKB9RbKKSIo2yGPE9QuH8YJca4"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"
