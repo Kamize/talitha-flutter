@@ -1,48 +1,65 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:file_picker/file_picker.dart';
 
 // Talitha Nabila - 1301204516
-List<CameraDescription> cameras = [];
-Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  cameras = await availableCameras();
-  runApp(CameraApp());
+void main() {
+  runApp(MyApp());
 }
 
 // Talitha Nabila - 1301204516
-class CameraApp extends StatefulWidget {
+class MyApp extends StatefulWidget {
   @override
-  _CameraAppState createState() => _CameraAppState();
+  _MyAppState createState() => _MyAppState();
 }
 
 // Talitha Nabila - 1301204516
-class _CameraAppState extends State<CameraApp> {
-  late CameraController controller;
-  @override
-  void initState() {
-    super.initState();
-    controller = CameraController(cameras[0], ResolutionPreset.max);
-    controller.initialize().then((_) {
-      if (!mounted) {
-        return;
+class _MyAppState extends State<MyApp> {
+  String? _filePath;
+  Future<void> _openFilePicker() async {
+    try {
+      final result = await FilePicker.platform.pickFiles();
+      if (result != null) {
+        setState(() {
+          _filePath = result.files.single.path;
+        });
       }
-      setState(() {});
-    });
+    } catch (e) {
+      print('Error selecting file: $e');
+    }
   }
 
-  void dispose() {
-    controller?.dispose();
-    super.dispose();
-  }
-
+// Talitha Nabila - 1301204516
   @override
   Widget build(BuildContext context) {
-    if (!controller.value.isInitialized) {
-      return Container();
-    }
     return MaterialApp(
-      home: CameraPreview(controller),
+      title: 'File Picker Example',
+      theme: ThemeData(
+            colorScheme: ColorScheme.fromSeed(seedColor: Colors.pink)
+      ),
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text('Talitha Nabila - 1301204516')
+        ),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton(
+                onPressed: _openFilePicker,
+                child: Text('Select File'),
+              ),
+              SizedBox(height: 16),
+              Text(
+                'Selected File: ${_filePath ?? "None"}',
+                style: TextStyle(fontSize: 16),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
